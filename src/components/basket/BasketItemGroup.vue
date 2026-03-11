@@ -20,7 +20,6 @@
         <span class="basket-row__title">{{ item.release.title }}</span>
         <span class="basket-row__meta">Release Type: {{ item.release.releaseType }}</span>
         <span class="basket-row__meta">Release Date: {{ item.release.releaseDate }}</span>
-        <span class="basket-row__subscription">Distribute your music with this annual subscription<br/>(Terms & Conditions apply)</span>
       </div>
       <div class="basket-row__actions-cell">
         <div class="basket-row__dropdown" @click="showActions = !showActions" v-click-outside="() => showActions = false">
@@ -52,7 +51,6 @@
         <span class="basket-row__service-name">{{ svc.name }}
           <template v-if="svc.detail"> <span class="basket-row__service-detail">{{ svc.detail }}</span></template>
         </span>
-        <span class="basket-row__meta">(Attached to the above release)</span>
       </div>
       <div class="basket-row__actions-cell"></div>
       <div class="basket-row__price">€{{ svc.price.toFixed(2) }}</div>
@@ -171,13 +169,6 @@ const vClickOutside = {
   &__meta {
     font-size: $text-xs;
     color: #77778e;
-  }
-
-  &__subscription {
-    font-size: $text-xs;
-    color: #8b8ba0;
-    margin-top: 0.35rem;
-    line-height: 1.4;
   }
 
   &__service-name {
