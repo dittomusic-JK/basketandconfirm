@@ -243,6 +243,10 @@ async function handleNativeShare() {
 .confirm-view {
   padding: 1.5rem 1.5rem 2.5rem;
 
+  @media (max-width: 768px) {
+    padding: 0.75rem 0.25rem 1.5rem;
+  }
+
   &__container {
     max-width: 80rem;
     margin: 0 auto;

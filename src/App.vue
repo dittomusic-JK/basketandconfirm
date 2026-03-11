@@ -169,6 +169,10 @@ onUnmounted(() => document.removeEventListener('mousedown', handleClickOutside))
     z-index: 1040;
     display: flex;
     align-items: center;
+
+    @media (max-width: 768px) {
+      padding: 0 0.75rem;
+    }
   }
   &__nav-inner {
     max-width: 80rem;
@@ -390,6 +394,11 @@ onUnmounted(() => document.removeEventListener('mousedown', handleClickOutside))
     margin: 0 auto;
     padding: 2rem;
     padding-top: calc(4rem + 2rem);
+
+    @media (max-width: 768px) {
+      padding: 0.75rem;
+      padding-top: calc(4rem + 0.75rem);
+    }
   }
 }
 </style>
