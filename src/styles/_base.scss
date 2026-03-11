@@ -1,0 +1,274 @@
+@use 'variables' as *;
+
+/* Font faces */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Brand Colors */
+  --pink: #ff006e;
+  --mint: #12c1ae;
+  --blue: #101f3c;
+  --blue-alternate: #287ef7;
+  --dark-indigo: #080727;
+  --indigo: #3a1bb9;
+  --light-indigo: #5f1fff;
+  --red: #ec0515;
+  --soft-red: #d92121;
+  --purple: #8640f4;
+  --light-purple: #d9c1ff;
+  --ditto-black: #111;
+  --ditto-grey: #626984;
+  --ditto-starter: #955fff;
+  --ditto-pro: #0f9;
+  --ditto-label: #f6c443;
+
+  /* Greyscale */
+  --white: #fff;
+  --darker-grey: #44444c;
+  --dark-grey: #9595a7;
+  --darkening-grey: #c7c4d6;
+  --faded-grey: #d2d2e3;
+  --medium-grey: #dddde7;
+  --light-grey: #efeffc;
+  --lighter-grey: #f9f9ff;
+
+  /* Status */
+  --error: #ee404c;
+  --warning: #ffb100;
+  --success: #00e785;
+  --info: #287ef7;
+  --strong-warning: #de6a3f;
+
+  /* Typography */
+  --brand-font-body: "Satoshi", Helvetica, Arial, sans-serif;
+  --brand-font-heading: "Poppins", Helvetica, Arial, sans-serif;
+
+  /* Brand Theme */
+  --brand-body: #101f3c;
+  --brand-body-light: #626984;
+  --brand-border: #d2d2e3;
+  --brand-inactive: #aac;
+  --brand-primary: #6c5ce7;
+  --brand-primary-hover: rgb(149.6428571429, 107.5, 255);
+  --brand-primary-active: #8640f4;
+  --brand-secondary: #287ef7;
+  --brand-secondary-hover: #559cff;
+  --brand-secondary-active: #285bf7;
+
+  /* Buttons */
+  --button-border-radius: 2rem;
+  --button-border-size: 2px;
+  --button-grey: #f2f2fd;
+  --primary-button-colour: var(--brand-primary);
+  --primary-button-hover: var(--brand-primary-hover);
+  --primary-button-active: var(--brand-primary-active);
+  --secondary-button-colour: var(--brand-primary);
+  --secondary-button-hover: var(--brand-primary-hover);
+  --secondary-button-active: var(--brand-primary-active);
+  --secondary-button-background: transparent;
+  --tertiary-button-colour: var(--brand-secondary);
+  --tertiary-button-hover: var(--brand-secondary-hover);
+  --tertiary-button-active: var(--brand-secondary-active);
+  --text-button-colour: var(--brand-primary);
+  --text-button-hover: var(--brand-primary-hover);
+  --text-button-active: var(--purple);
+
+  /* Form Inputs */
+  --input-font-size: 18px;
+  --input-color: var(--blue);
+  --input-border-color: var(--brand-border);
+  --input-placeholder-color: #b1b1c3;
+  --input-disabled-bg: var(--lighter-grey);
+  --input-disabled-color: var(--brand-border);
+  --input-disabled-border-color: var(--brand-border);
+  --input-margin: 1.5rem;
+  --input-padding: 1.5rem;
+  --text-input-padding: calc(var(--input-padding) - 2px);
+
+  /* Labels */
+  --label-color: var(--brand-body-light);
+  --label-disabled-color: var(--input-disabled-color);
+
+  /* Tables */
+  --table-header-color: #7e7e7e;
+  --table-body-color: var(--darker-grey);
+
+  /* Navigation */
+  --navTopPos: 4rem;
+  --navbar-collapse-breakpoint: 990px;
+
+  /* Layout */
+  --gutter: 30px;
+
+  /* Animation */
+  --animate-spin: spin 1s linear infinite;
+}
+
+/* Legacy Anima tokens (mapped to framework) */
+:root {
+  --ditto-colors-light-dark-active-green: rgba(0, 211, 70, 1);
+  --ditto-colors-light-dark-ditto-background-white: rgba(255, 255, 255, 1);
+  --ditto-colors-light-dark-ditto-border-grey: rgba(210, 210, 227, 1);
+  --ditto-colors-light-dark-ditto-inactive-variant: rgba(170, 170, 204, 1);
+  --ditto-colors-light-dark-ditto-labels-yellow: rgba(246, 196, 67, 1);
+  --ditto-colors-light-dark-ditto-light-blue: rgba(38, 128, 235, 1);
+  --ditto-colors-light-dark-ditto-light-grey: rgba(249, 249, 255, 1);
+  --ditto-colors-light-dark-ditto-mid-button-grey: rgba(242, 242, 253, 1);
+  --ditto-colors-light-dark-ditto-orange: rgba(255, 177, 0, 1);
+  --ditto-colors-light-dark-ditto-pro-green: rgba(0, 255, 153, 1);
+  --ditto-colors-light-dark-ditto-purple: rgba(95, 31, 255, 1);
+  --ditto-colors-light-dark-ditto-red: rgba(236, 5, 21, 1);
+  --ditto-colors-light-dark-ditto-starter-puple: rgba(149, 95, 255, 1);
+  --ditto-colors-light-dark-ditto-subtext-grey: rgba(98, 105, 132, 1);
+  --ditto-colors-light-dark-ditto-text-fill: rgba(16, 31, 60, 1);
+  --ditto-colors-light-dark-ditto-text-prompt: rgba(177, 177, 195, 1);
+}
+
+/* Base resets */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: $font-satoshi;
+}
+
+body {
+  font-family: inherit;
+  line-height: inherit;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+hr {
+  height: 0;
+  color: inherit;
+  border: 0;
+  border-top: 1px solid;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+b, strong {
+  font-weight: bolder;
+}
+
+small {
+  font-size: 80%;
+}
+
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+button, [role="button"] {
+  cursor: pointer;
+}
+
+:disabled {
+  cursor: default;
+}
+
+ol, ul, menu {
+  list-style: none;
+}
+
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: block;
+  vertical-align: middle;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+[hidden] {
+  display: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(1turn); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes shimmer {
+  0%, 90%, to { background-position: calc(-100% - var(--shimmer-width)) 0; }
+  30%, 60% { background-position: calc(100% + var(--shimmer-width)) 0; }
+}
+
+.animate-fade-in { animation: fade-in 1s var(--animation-delay, 0s) ease forwards; }
+.animate-fade-up { animation: fade-up 1s var(--animation-delay, 0s) ease forwards; }
+.animate-spin { animation: var(--animate-spin); }
