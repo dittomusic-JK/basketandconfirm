@@ -2,11 +2,20 @@
   <div class="basket-view">
     <div class="basket-view__container">
       <h1 class="basket-view__title">Basket</h1>
-      <p class="basket-view__subtitle">Review your release services and checkout details</p>
+      <p class="basket-view__subtitle">You're almost there! Checkout to confirm your releases.</p>
 
       <!-- Empty state -->
       <div v-if="basket.length === 0" class="basket-view__empty">
-        <p>You have nothing in the basket</p>
+        <div class="basket-view__empty-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <path d="M23.27 9.03c-.57-.66-1.39-1.03-2.27-1.03h-.09C20.42 3.51 16.6 0 11.98 0 7.37 0 3.55 3.51 3.05 8H3c-.87 0-1.69.38-2.26 1.03-.57.66-.83 1.53-.7 2.4l1.06 7.42A5.01 5.01 0 007.02 24h9.96a5.01 5.01 0 004.93-5.15l1.06-7.42c.12-.86-.14-1.73-.7-2.4z" fill="#e3e3ef"/>
+          </svg>
+        </div>
+        <p class="basket-view__empty-title">Your basket is empty</p>
+        <p class="basket-view__empty-sub">Add releases and services to get started.</p>
+        <button class="basket-view__empty-btn" @click="$router.push('/')">
+          Browse releases
+        </button>
       </div>
 
       <!-- Two-column layout -->
@@ -15,12 +24,10 @@
         <div class="basket-view__main">
           <div class="basket-view__table">
             <div class="basket-view__header">
-              <span>Item</span>
+              <span></span>
               <span>Details</span>
-              <span>Actions</span>
+              <span></span>
               <span class="basket-view__header--right">Price</span>
-              <span class="basket-view__header--right">Qty</span>
-              <span class="basket-view__header--right">Total</span>
             </div>
 
             <BasketItemGroup
@@ -41,10 +48,19 @@
 
             <!-- Discount code -->
             <DiscountCode
-              v-if="!isFreeOrder || discount"
+              v-if="subTotal > 0 || discount"
               :applied-discount="discount"
               @apply="applyDiscount"
               @remove="removeDiscount"
+            />
+
+            <!-- Account credit -->
+            <AccountCredit
+              v-if="credit.balance > 0 && subTotal > 0"
+              :balance="credit.balance"
+              :credit-applied="creditApplied"
+              @apply="applyCredit"
+              @remove="removeCredit"
             />
 
             <!-- Totals -->
@@ -66,15 +82,6 @@
                 <span class="basket-view__total-value basket-view__total-value--bold">€{{ totalPrice.toFixed(2) }}</span>
               </div>
             </div>
-
-            <!-- Account credit -->
-            <AccountCredit
-              v-if="credit.balance > 0 && !isFreeOrder"
-              :balance="credit.balance"
-              :credit-applied="creditApplied"
-              @apply="applyCredit"
-              @remove="removeCredit"
-            />
 
             <!-- Payment -->
             <div class="basket-view__payment-section">
@@ -200,17 +207,53 @@ function handleCheckout() {
 
   &__empty {
     text-align: center;
-    padding: 3rem 1rem;
+    padding: 3.5rem 1.5rem;
     background: #fff;
     border-radius: $radius-card;
     border: 1px solid var(--light-grey);
     box-shadow: $shadow-card;
+    max-width: 28rem;
+    margin: 0 auto;
+  }
 
-    p {
-      font-size: $text-body;
-      color: var(--ditto-grey);
-      font-family: $font-satoshi;
-    }
+  &__empty-icon {
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  &__empty-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: $font-poppins;
+    color: var(--blue);
+    margin-bottom: 0.3rem;
+  }
+
+  &__empty-sub {
+    font-size: 0.82rem;
+    font-weight: 500;
+    font-family: $font-satoshi;
+    color: var(--ditto-grey);
+    margin-bottom: 1.25rem;
+  }
+
+  &__empty-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    padding: 0 1.5rem;
+    border-radius: 999px;
+    border: 1px solid #111;
+    background: #111;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: $font-satoshi;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 0.9; }
   }
 
   // Two-column grid
@@ -238,7 +281,7 @@ function handleCheckout() {
 
   &__header {
     display: grid;
-    grid-template-columns: 3.5rem 1fr 6rem 4.5rem 3rem 4.5rem;
+    grid-template-columns: 3.5rem 1fr auto 5.5rem;
     padding: 0.8rem 1rem;
     background: #fff;
     border-bottom: 1px solid #ececf5;

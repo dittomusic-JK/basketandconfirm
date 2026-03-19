@@ -73,7 +73,7 @@
             </svg>
           </button>
 
-          <button class="app__icon-btn app__icon-btn--cart" @click="$router.push('/basket')">
+          <button class="app__icon-btn app__icon-btn--cart" @click="miniBasketOpen = !miniBasketOpen">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M23.2668 9.034C22.6976 8.377 21.8726 8 21.0028 8H20.9169C20.4185 3.506 16.6035 0 11.9846 0C7.36559 0 3.55058 3.506 3.05223 8H2.9963C2.12744 8 1.30351 8.377 0.733259 9.034C0.163005 9.691 -0.092661 10.562 0.0301784 11.425L1.08979 18.849C1.50925 21.786 4.05991 24 7.02204 24H16.978C19.9402 24 22.4908 21.785 22.9103 18.849L23.9699 11.425C24.0927 10.563 23.8361 9.692 23.2668 9.034ZM11.9846 2C15.5 2 18.4171 4.613 18.9035 8H5.0656C5.55196 4.613 8.46915 2 11.9846 2ZM21.9925 11.142L20.9329 18.566C20.6532 20.524 18.9534 22.001 16.978 22.001H7.02204C5.04562 22.001 3.34584 20.524 3.06721 18.566L2.00759 11.142C1.96565 10.851 2.04954 10.568 2.24129 10.345C2.43404 10.122 2.70169 10 2.9953 10H21.0028C21.2964 10 21.564 10.122 21.7578 10.345C21.9495 10.568 22.0344 10.851 21.9925 11.142ZM12.9832 13V19C12.9832 19.553 12.5368 20 11.9846 20C11.4323 20 10.9859 19.553 10.9859 19V13C10.9859 12.447 11.4323 12 11.9846 12C12.5368 12 12.9832 12.447 12.9832 13ZM17.9767 13V19C17.9767 19.553 17.5303 20 16.978 20C16.4257 20 15.9793 19.553 15.9793 19V13C15.9793 12.447 16.4257 12 16.978 12C17.5303 12 17.9767 12.447 17.9767 13ZM7.98977 13V19C7.98977 19.553 7.54336 20 6.99108 20C6.4388 20 5.99239 19.553 5.99239 19V13C5.99239 12.447 6.4388 12 6.99108 12C7.54336 12 7.98977 12.447 7.98977 13Z" fill="#B1B1C3"/>
             </svg>
@@ -122,16 +122,20 @@
     <main class="app__main">
       <router-view />
     </main>
+
+    <MiniBasket :open="miniBasketOpen" @close="miniBasketOpen = false" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useBasketStore } from './composables/useBasketStore'
+import MiniBasket from './components/basket/MiniBasket.vue'
 
 const { basket } = useBasketStore()
 const basketCount = computed(() => basket.value.length)
 
+const miniBasketOpen = ref(false)
 const rightsOpen = ref(false)
 const promoOpen = ref(false)
 const avatarOpen = ref(false)

@@ -18,27 +18,21 @@
       </div>
       <div class="basket-row__details">
         <span class="basket-row__title">{{ item.release.title }}</span>
-        <span class="basket-row__meta">Release Type: {{ item.release.releaseType }}</span>
-        <span class="basket-row__meta">Release Date: {{ item.release.releaseDate }}</span>
       </div>
       <div class="basket-row__actions-cell">
-        <div class="basket-row__dropdown" @click="showActions = !showActions" v-click-outside="() => showActions = false">
-          <button class="basket-row__action-btn">
-            Actions
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <Transition name="dropdown">
-            <div v-if="showActions" class="basket-row__dropdown-menu">
-              <button class="basket-row__dropdown-item" @click="$emit('edit', item.release.id)">Edit</button>
-              <button class="basket-row__dropdown-item basket-row__dropdown-item--danger" @click="$emit('remove', item.release.id)">Remove</button>
-            </div>
-          </Transition>
-        </div>
+        <button class="basket-row__icon-btn" title="Edit" @click="$emit('edit', item.release.id)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+        <button class="basket-row__icon-btn basket-row__icon-btn--danger" title="Remove" @click="$emit('remove', item.release.id)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+          </svg>
+        </button>
       </div>
-      <div class="basket-row__price">Free</div>
-      <div class="basket-row__qty">1</div>
       <div class="basket-row__total">Free</div>
     </div>
 
@@ -48,20 +42,15 @@
         <span class="basket-row__arrow">→</span>
       </div>
       <div class="basket-row__details">
-        <span class="basket-row__service-name">{{ svc.name }}
-          <template v-if="svc.detail"> <span class="basket-row__service-detail">{{ svc.detail }}</span></template>
-        </span>
+        <span class="basket-row__service-name">{{ svc.name }}</span>
       </div>
       <div class="basket-row__actions-cell"></div>
-      <div class="basket-row__price">€{{ svc.price.toFixed(2) }}</div>
-      <div class="basket-row__qty">{{ svc.quantity }}</div>
-      <div class="basket-row__total">€{{ (svc.price * svc.quantity).toFixed(2) }}</div>
+      <div class="basket-row__total">€{{ svc.price.toFixed(2) }}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { BasketItem } from '../../types'
 
 defineProps<{
@@ -73,7 +62,6 @@ defineEmits<{
   remove: [releaseId: string]
 }>()
 
-const showActions = ref(false)
 const baseUrl = import.meta.env.BASE_URL
 const releaseArtworkById: Record<string, string> = {
   'rel-1': `${baseUrl}img/image-1.png`,
@@ -81,20 +69,6 @@ const releaseArtworkById: Record<string, string> = {
 }
 
 const releaseArtworkSrc = (releaseId: string): string => releaseArtworkById[releaseId] ?? ''
-
-// Simple click-outside directive (inline)
-const vClickOutside = {
-  mounted(el: HTMLElement, binding: { value: () => void }) {
-    const handler = (e: Event) => {
-      if (!el.contains(e.target as Node)) binding.value()
-    }
-    ;(el as any).__clickOutside = handler
-    document.addEventListener('click', handler)
-  },
-  unmounted(el: HTMLElement) {
-    document.removeEventListener('click', (el as any).__clickOutside)
-  }
-}
 </script>
 
 <style lang="scss" scoped>
@@ -106,9 +80,9 @@ const vClickOutside = {
 
 .basket-row {
   display: grid;
-  grid-template-columns: 3.5rem 1fr 6rem 4.5rem 3rem 4.5rem;
-  align-items: start;
-  padding: 1rem 1rem;
+  grid-template-columns: 3.5rem 1fr auto 5.5rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid #ececf5;
   font-family: $font-satoshi;
   gap: 0.5rem;
@@ -186,88 +160,51 @@ const vClickOutside = {
 
   &__actions-cell {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
+    gap: 0.35rem;
 
     @media (max-width: 768px) {
       grid-column: 1 / -1;
     }
   }
 
-  &__dropdown {
-    position: relative;
-  }
-
-  &__action-btn {
+  &__icon-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.35rem 0.65rem;
+    justify-content: center;
+    width: 1.85rem;
+    height: 1.85rem;
     border: 1px solid #dcdceb;
-    border-radius: 999px;
-    font-size: $text-xs;
-    font-weight: 500;
-    color: #4a4a62;
+    border-radius: 0.45rem;
     background: #fff;
+    color: #6e6e84;
     cursor: pointer;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
+    padding: 0;
 
     &:hover {
-      border-color: #c8c8dd;
-      background: #f8f8fc;
-    }
-  }
-
-  &__dropdown-menu {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    min-width: 8rem;
-    background: #fff;
-    border: 1px solid #e3e3ef;
-    border-radius: $radius-lg;
-    box-shadow: 0 8px 20px rgba(17, 17, 17, 0.08);
-    z-index: 50;
-    overflow: hidden;
-  }
-
-  &__dropdown-item {
-    display: block;
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: $text-sm;
-    font-family: $font-satoshi;
-    color: var(--blue);
-    text-align: left;
-    cursor: pointer;
-    transition: background 0.1s;
-
-    &:hover {
-      background: #f8f8fc;
+      border-color: #c0c0d4;
+      background: #f5f5fb;
+      color: var(--blue);
     }
 
-    &--danger {
+    &--danger:hover {
+      border-color: #f0c0c0;
+      background: #fef5f5;
       color: var(--error);
-
-      &:hover {
-        background: rgba($color-error, 0.05);
-      }
-    }
-  }
-
-  &__price, &__qty, &__total {
-    font-size: 0.8125rem;
-    color: var(--blue);
-    text-align: right;
-    padding-top: 0.2rem;
-
-    @media (max-width: 768px) {
-      display: none;
     }
   }
 
   &__total {
-    font-weight: 700;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--blue);
+    text-align: right;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 }
 

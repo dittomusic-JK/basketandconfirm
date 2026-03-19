@@ -42,7 +42,15 @@ const validDiscounts: Record<string, number> = {
 
 // ── Reactive state ─────────────────────────────────────────
 const basket = ref<BasketItem[]>(JSON.parse(JSON.stringify(defaultBasket)))
-const discount = ref<Discount | null>(null)
+
+// Pre-apply a demo discount so the applied state is visible on load
+const initialSubTotal = defaultBasket.reduce((sum, item) =>
+  sum + item.services.reduce((s, svc) => s + svc.price * svc.quantity, 0), 0)
+const discount = ref<Discount | null>({
+  code: 'DITTO20',
+  percentage: 20,
+  amount: Math.round(initialSubTotal * 20 / 100),
+})
 const credit = ref<Credit>({ balance: 20, applied: 0 })
 const order = ref<OrderSummary | null>(null)
 

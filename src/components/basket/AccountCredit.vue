@@ -3,8 +3,7 @@
     <!-- Not applied state -->
     <div v-if="creditApplied === 0" class="credit__offer">
       <div class="credit__info">
-        <h4 class="credit__title">Account credit</h4>
-        <p class="credit__balance">You currently have <strong>€{{ balance.toFixed(2) }}</strong> credit on your account.</p>
+        <p class="credit__balance">You have <strong>€{{ balance.toFixed(2) }}</strong> of account credit</p>
       </div>
       <button class="credit__apply" @click="$emit('apply')">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="display: inline; vertical-align: middle; margin-right: 4px;">

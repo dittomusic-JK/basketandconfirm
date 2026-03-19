@@ -11,7 +11,7 @@
           <p class="confirm-view__eyebrow">Thanks for your order</p>
           <h1 class="confirm-view__title">Order confirmed</h1>
           <p class="confirm-view__confirmation-number">Confirmation no. {{ order.orderId }}</p>
-          <p class="confirm-view__subtitle">You’re all set. We’ve started processing your releases and sent your receipt by email.</p>
+          <p class="confirm-view__subtitle">You're all set. We'll process your releases and upload them to all major stores. You'll receive a receipt by email.</p>
         </div>
         <span class="confirm-view__paid-badge">Paid</span>
       </section>
@@ -97,41 +97,24 @@
         </section>
 
         <aside class="confirm-view__card confirm-view__card--next">
-          <h2 class="confirm-view__next-title">What’s next</h2>
+          <h2 class="confirm-view__next-title">What's next?</h2>
 
           <section class="confirm-view__module">
-            <h3 class="confirm-view__module-title">Get people excited for your release</h3>
-            <div class="confirm-view__share-preview">
-              <div class="confirm-view__share-artwork">
-                <img
-                  v-if="shareArtworkSrc"
-                  :src="shareArtworkSrc"
-                  :alt="`${firstReleaseTitle} artwork preview`"
-                  class="confirm-view__share-artwork-image"
-                />
-                <div v-else class="confirm-view__share-artwork-fallback">NO IMAGE</div>
-              </div>
-              <div class="confirm-view__share-content">
-                <p class="confirm-view__share-headline">{{ firstReleaseTitle }} | Distributed by Ditto Music</p>
-                <p class="confirm-view__share-url">{{ shareUrl }}</p>
-                <p class="confirm-view__share-description">
-                  Available in all major stores from {{ firstReleaseDate }}. Find out more about Ditto Music distribution and promotion.
-                </p>
-                <div class="confirm-view__share-links">
-                  <a :href="facebookShareUrl" target="_blank" rel="noreferrer">
-                    <svg class="confirm-view__share-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6h1.7V4.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.3V11H7.5v3h2.7v8h3.3Z" fill="currentColor"/>
-                    </svg>
-                    <span>Share on Facebook</span>
-                  </a>
-                  <a :href="twitterShareUrl" target="_blank" rel="noreferrer">
-                    <svg class="confirm-view__share-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M4 4h3.4l4.1 5.6L16.2 4H20l-6.6 7.5L20.4 20H17l-4.5-6.1L7.3 20H3.6l7-8L4 4Z" fill="currentColor"/>
-                    </svg>
-                    <span>Post on X</span>
-                  </a>
-                </div>
-              </div>
+            <h3 class="confirm-view__module-title">Build hype for your new release</h3>
+            <p class="confirm-view__module-copy">Let your fans know your music is on its way. Share the news across your socials.</p>
+            <div class="confirm-view__share-links">
+              <a :href="facebookShareUrl" target="_blank" rel="noreferrer" class="confirm-view__share-pill">
+                <svg class="confirm-view__share-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6h1.7V4.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.3V11H7.5v3h2.7v8h3.3Z" fill="currentColor"/>
+                </svg>
+                Share on Facebook
+              </a>
+              <a :href="twitterShareUrl" target="_blank" rel="noreferrer" class="confirm-view__share-pill">
+                <svg class="confirm-view__share-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 4h3.4l4.1 5.6L16.2 4H20l-6.6 7.5L20.4 20H17l-4.5-6.1L7.3 20H3.6l7-8L4 4Z" fill="currentColor"/>
+                </svg>
+                Post on X
+              </a>
             </div>
             <div class="confirm-view__module-actions">
               <button class="confirm-view__secondary-btn" @click="handleNativeShare">Share now</button>
@@ -140,8 +123,8 @@
           </section>
 
           <section class="confirm-view__module">
-            <h3 class="confirm-view__module-title">Want to earn up to $50?</h3>
-            <p class="confirm-view__module-copy">Invite friends to Ditto and earn <strong>$10 per signup</strong>, up to $50 in rewards.</p>
+            <h3 class="confirm-view__module-title">Refer friends and earn cash.</h3>
+            <p class="confirm-view__module-copy">Earn up to $50 by inviting friends to join Ditto. Get <strong>$10 cash</strong> for every friend who signs up.</p>
             <a :href="referFriendUrl" target="_blank" rel="noreferrer" class="confirm-view__module-link">Refer a friend</a>
           </section>
 
@@ -597,98 +580,37 @@ async function handleNativeShare() {
     }
   }
 
-  &__share-preview {
-    display: grid;
-    grid-template-columns: 6.5rem 1fr;
-    gap: 0.7rem;
-    border: 1px solid #ececf5;
-    border-radius: 0.7rem;
-    background: #fbfbfe;
-    padding: 0.5rem;
-    margin-bottom: 0.6rem;
-
-    @media (max-width: 420px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__share-artwork {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border: 1px solid #dfdfea;
-    border-radius: 0.45rem;
-    overflow: hidden;
-    background: #f0f0f5;
-  }
-
-  &__share-artwork-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  &__share-artwork-fallback {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.66rem;
-    font-weight: 700;
-    color: #9b9bad;
-    letter-spacing: 0.04em;
-    font-family: $font-satoshi;
-  }
-
-  &__share-content {
-    min-width: 0;
-  }
-
-  &__share-headline {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--blue);
-    line-height: 1.3;
-    font-family: $font-satoshi;
-    margin-bottom: 0.15rem;
-  }
-
-  &__share-url {
-    font-size: 0.68rem;
-    color: #8a8aa0;
-    font-family: $font-satoshi;
-    margin-bottom: 0.45rem;
-    word-break: break-all;
-  }
-
-  &__share-description {
-    font-size: 0.73rem;
-    color: #4f5f82;
-    font-family: $font-satoshi;
-    line-height: 1.45;
-    margin-bottom: 0.45rem;
-  }
-
   &__share-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem 0.9rem;
+    gap: 0.45rem;
+    margin-bottom: 0.65rem;
+  }
 
-    a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #2b6de1;
-      font-family: $font-satoshi;
-      text-decoration: underline;
+  &__share-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid #d8d8e8;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: $font-satoshi;
+    color: #3f3f5d;
+    background: #fff;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+
+    &:hover {
+      border-color: #b8b8d0;
+      background: #f8f8fc;
     }
   }
 
   &__share-icon {
-    width: 0.78rem;
-    height: 0.78rem;
+    width: 0.82rem;
+    height: 0.82rem;
     flex-shrink: 0;
   }
 

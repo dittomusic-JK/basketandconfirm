@@ -2,14 +2,14 @@
   <div class="discount">
     <!-- Input mode -->
     <div v-if="!appliedDiscount" class="discount__input-row">
-      <label class="discount__label">Do you have a Promo Code?</label>
+      <label class="discount__label">Do you have a discount code?</label>
       <div class="discount__field">
         <div class="discount__controls">
           <input
             v-model="code"
             type="text"
             class="discount__input"
-            placeholder="Enter promo code"
+            placeholder="Enter discount code"
             @keyup.enter="handleValidate"
           />
           <button class="discount__validate-btn" @click="handleValidate">
