@@ -101,7 +101,15 @@
 
           <section class="confirm-view__module">
             <h3 class="confirm-view__module-title">Build hype for your new release</h3>
-            <p class="confirm-view__module-copy">Let your fans know your music is on its way. Share the news across your socials.</p>
+            <div class="confirm-view__share-card">
+              <img
+                v-if="shareArtworkSrc"
+                :src="shareArtworkSrc"
+                :alt="firstReleaseTitle"
+                class="confirm-view__share-card-art"
+              />
+              <p class="confirm-view__share-card-text">{{ shareText }}</p>
+            </div>
             <div class="confirm-view__share-links">
               <a :href="facebookShareUrl" target="_blank" rel="noreferrer" class="confirm-view__share-pill">
                 <svg class="confirm-view__share-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -115,10 +123,6 @@
                 </svg>
                 Post on X
               </a>
-            </div>
-            <div class="confirm-view__module-actions">
-              <button class="confirm-view__secondary-btn" @click="handleNativeShare">Share now</button>
-              <button class="confirm-view__ghost-btn" @click="copyShareLink">Copy link</button>
             </div>
           </section>
 
@@ -177,49 +181,17 @@ const shareArtworkSrc = computed(() => {
   const releaseId = order.value?.items[0]?.release.id
   return releaseId ? (releaseArtworkById[releaseId] ?? '') : ''
 })
-const shareUrl = computed(() => {
-  const releaseId = order.value?.items[0]?.release.id
-  return releaseId ? `https://dittomusic.com/releases/${releaseId}` : 'https://dittomusic.com'
-})
-const shareMessage = computed(() => `My release "${firstReleaseTitle.value}" is coming soon via Ditto Music.`)
+const dittoUrl = 'https://dittomusic.com/en'
+const shareText = computed(() =>
+  `My new release ${firstReleaseTitle.value} drops on all major platforms on ${firstReleaseDate.value}. Powered by @dittomusic. ${dittoUrl}`
+)
 
 const twitterShareUrl = computed(() =>
-  `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage.value)}&url=${encodeURIComponent(shareUrl.value)}`
+  `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText.value)}`
 )
 const facebookShareUrl = computed(() =>
-  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl.value)}`
+  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dittoUrl)}&hashtag=${encodeURIComponent('#dittomusic')}`
 )
-
-async function copyShareLink() {
-  try {
-    await navigator.clipboard.writeText(shareUrl.value)
-    showToast('Share link copied to clipboard.')
-  } catch {
-    showToast('Could not copy the link automatically. Please copy it manually.', 'warning')
-  }
-}
-
-async function handleNativeShare() {
-  const nav = navigator as Navigator & { share?: (data: ShareData) => Promise<void> }
-
-  if (!nav.share) {
-    await copyShareLink()
-    return
-  }
-
-  try {
-    await nav.share({
-      title: 'My upcoming release',
-      text: shareMessage.value,
-      url: shareUrl.value,
-    })
-  } catch (error) {
-    if (typeof error === 'object' && error && 'name' in error && (error as { name: string }).name === 'AbortError') {
-      return
-    }
-    showToast('Share was not completed. You can still copy the link below.', 'info')
-  }
-}
 </script>
 
 <style lang="scss" scoped>
@@ -580,11 +552,38 @@ async function handleNativeShare() {
     }
   }
 
+  &__share-card {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem;
+    border: 1px solid #ececf5;
+    border-radius: 0.6rem;
+    background: #fbfbfe;
+    margin-bottom: 0.65rem;
+  }
+
+  &__share-card-art {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.4rem;
+    object-fit: cover;
+    border: 1px solid #e4e4ef;
+    flex-shrink: 0;
+  }
+
+  &__share-card-text {
+    font-size: 0.72rem;
+    font-weight: 500;
+    font-family: $font-satoshi;
+    color: #5a5a72;
+    line-height: 1.45;
+  }
+
   &__share-links {
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
-    margin-bottom: 0.65rem;
   }
 
   &__share-pill {
@@ -612,37 +611,6 @@ async function handleNativeShare() {
     width: 0.82rem;
     height: 0.82rem;
     flex-shrink: 0;
-  }
-
-  &__module-actions {
-    display: flex;
-    gap: 0.45rem;
-    margin-bottom: 0.5rem;
-  }
-
-  &__secondary-btn,
-  &__ghost-btn {
-    height: 2rem;
-    border-radius: 999px;
-    padding: 0 0.8rem;
-    font-size: 0.72rem;
-    font-weight: 700;
-    font-family: $font-satoshi;
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  &__secondary-btn {
-    border: 1px solid #171717;
-    background: #171717;
-    color: #fff;
-    flex: 1;
-  }
-
-  &__ghost-btn {
-    border: 1px solid #d8d8e8;
-    background: #fff;
-    color: #505066;
-    flex: 1;
   }
 
   &__promo-head {
