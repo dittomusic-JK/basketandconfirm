@@ -45,6 +45,7 @@
       </div>
       <div class="basket-row__details">
         <span class="basket-row__service-name">{{ svc.name }}</span>
+        <span v-if="svc.name === 'Pre-release Downloads'" class="basket-row__meta">{{ item.release.releaseDate }}</span>
       </div>
       <div class="basket-row__actions-cell"></div>
       <div class="basket-row__total">€{{ svc.price.toFixed(2) }}</div>
