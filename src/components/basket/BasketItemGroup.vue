@@ -18,6 +18,8 @@
       </div>
       <div class="basket-row__details">
         <span class="basket-row__title">{{ item.release.title }}</span>
+        <span class="basket-row__meta">{{ item.release.releaseType }}</span>
+        <span class="basket-row__meta">{{ item.release.releaseDate }}</span>
       </div>
       <div class="basket-row__actions-cell">
         <button class="basket-row__icon-btn" title="Edit" @click="$emit('edit', item.release.id)">
