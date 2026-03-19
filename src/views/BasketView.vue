@@ -107,6 +107,13 @@
       @cancel="removeModal.visible = false"
     />
 
+    <!-- Admin: demo state toggles -->
+    <div class="basket-view__admin">
+      <span class="basket-view__admin-label">Demo:</span>
+      <button class="basket-view__admin-btn" @click="loadFreeBasket">Free basket</button>
+      <button class="basket-view__admin-btn" @click="loadPaidBasket">Paid basket</button>
+    </div>
+
     <!-- Toast -->
     <Toast
       :visible="toastVisible"
@@ -132,7 +139,7 @@ const router = useRouter()
 const {
   basket, discount, credit, subTotal, discountAmount, creditApplied,
   totalPrice, isFreeOrder, removeRelease, applyDiscount, removeDiscount,
-  applyCredit, removeCredit, checkout,
+  applyCredit, removeCredit, loadPaidBasket, loadFreeBasket, checkout,
   toastMessage, toastType, toastVisible, showToast
 } = useBasketStore()
 
@@ -382,6 +389,41 @@ function handleCheckout() {
       font-weight: 700;
       background: #111;
       border-color: #111;
+    }
+  }
+
+  &__admin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #d8d8e8;
+  }
+
+  &__admin-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-family: $font-satoshi;
+    color: #8888a0;
+  }
+
+  &__admin-btn {
+    padding: 0.3rem 0.7rem;
+    border: 1px dashed #c8c8dd;
+    border-radius: 999px;
+    background: none;
+    color: #8888a0;
+    font-size: 0.68rem;
+    font-weight: 500;
+    font-family: $font-satoshi;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover {
+      color: #5f5f77;
+      border-color: #a8a8c0;
     }
   }
 }

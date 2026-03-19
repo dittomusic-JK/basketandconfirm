@@ -2,7 +2,20 @@ import { ref, computed } from 'vue'
 import type { BasketItem, Discount, Credit, OrderSummary } from '../types'
 
 // ── Mock data ──────────────────────────────────────────────
-const defaultBasket: BasketItem[] = [
+const freeBasket: BasketItem[] = [
+  {
+    release: {
+      id: 'rel-1',
+      title: 'Release 4',
+      releaseType: 'Single',
+      releaseDate: 'January 30th, 2026',
+      isFree: true,
+    },
+    services: [],
+  },
+]
+
+const paidBasket: BasketItem[] = [
   {
     release: {
       id: 'rel-1',
@@ -14,7 +27,7 @@ const defaultBasket: BasketItem[] = [
     services: [
       { id: 'svc-1', releaseId: 'rel-1', name: 'Charts Registration UK / Ireland', price: 35, quantity: 1 },
       { id: 'svc-2', releaseId: 'rel-1', name: 'Pre-release Downloads', price: 50, quantity: 1 },
-      { id: 'svc-3', releaseId: 'rel-1', name: 'Priority Distro', price: 50, quantity: 1, detail: 'Estimated Go-Live Time: Friday 16 January, 9:21 pm (GMT)' },
+      { id: 'svc-3', releaseId: 'rel-1', name: 'Priority Distro', price: 50, quantity: 1 },
     ],
   },
   {
@@ -41,16 +54,8 @@ const validDiscounts: Record<string, number> = {
 }
 
 // ── Reactive state ─────────────────────────────────────────
-const basket = ref<BasketItem[]>(JSON.parse(JSON.stringify(defaultBasket)))
-
-// Pre-apply a demo discount so the applied state is visible on load
-const initialSubTotal = defaultBasket.reduce((sum, item) =>
-  sum + item.services.reduce((s, svc) => s + svc.price * svc.quantity, 0), 0)
-const discount = ref<Discount | null>({
-  code: 'DITTO20',
-  percentage: 20,
-  amount: Math.round(initialSubTotal * 20 / 100),
-})
+const basket = ref<BasketItem[]>(JSON.parse(JSON.stringify(freeBasket)))
+const discount = ref<Discount | null>(null)
 const credit = ref<Credit>({ balance: 20, applied: 0 })
 const order = ref<OrderSummary | null>(null)
 
@@ -122,6 +127,21 @@ function removeCredit() {
   credit.value.applied = 0
 }
 
+function loadPaidBasket() {
+  basket.value = JSON.parse(JSON.stringify(paidBasket))
+  // Pre-apply a discount so the applied state is visible
+  const sub = paidBasket.reduce((sum, item) =>
+    sum + item.services.reduce((s, svc) => s + svc.price * svc.quantity, 0), 0)
+  discount.value = { code: 'DITTO20', percentage: 20, amount: Math.round(sub * 20 / 100) }
+  credit.value.applied = 0
+}
+
+function loadFreeBasket() {
+  basket.value = JSON.parse(JSON.stringify(freeBasket))
+  discount.value = null
+  credit.value.applied = 0
+}
+
 function checkout() {
   order.value = {
     orderId: String(Math.floor(100000 + Math.random() * 900000)),
@@ -159,6 +179,8 @@ export function useBasketStore() {
     removeDiscount,
     applyCredit,
     removeCredit,
+    loadPaidBasket,
+    loadFreeBasket,
     checkout,
     toastMessage,
     toastType,
