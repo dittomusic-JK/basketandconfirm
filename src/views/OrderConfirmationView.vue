@@ -11,7 +11,7 @@
           <p class="confirm-view__eyebrow">Thanks for your order</p>
           <h1 class="confirm-view__title">Order confirmed</h1>
           <p class="confirm-view__confirmation-number">Confirmation no. {{ order.orderId }}</p>
-          <p class="confirm-view__subtitle">You're all set. We'll process your releases and upload them to all major stores. You'll receive a receipt by email.</p>
+          <p class="confirm-view__subtitle">You’re all set. We’ll process your releases and upload them to stores. You’ll receive a receipt by email.</p>
         </div>
         <span class="confirm-view__paid-badge">Paid</span>
       </section>
