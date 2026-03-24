@@ -12,8 +12,7 @@
     </div>
     <p class="payment__terms">
       By selecting one of the payment options, you confirm that you have read and agree to our
-      <a href="#" class="payment__link">Terms of Use</a>, <a href="#" class="payment__link">Privacy Policy</a>, and
-      <a href="#" class="payment__link">Refund Policy</a>.
+      <a href="#" class="payment__link">terms of use</a>.
     </p>
     <button class="payment__admin" @click="$emit('bypass')">
       Admin: bypass payment
