@@ -82,7 +82,7 @@
           </div>
 
           <div class="confirm-view__actions">
-            <a href="https://dittomusic.com/en/catalogue" class="confirm-view__primary-btn">Music Catalogue</a>
+<a href="https://dashboard.dittomusic.com" class="confirm-view__primary-btn">Music Catalogue</a>
           </div>
         </section>
 
