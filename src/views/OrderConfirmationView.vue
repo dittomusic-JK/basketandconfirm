@@ -39,8 +39,6 @@
               <div class="confirm-view__table-header">
                 <span>Item</span>
                 <span>Description</span>
-                <span class="confirm-view__table-header--right">Item Cost</span>
-                <span class="confirm-view__table-header--right">Qty</span>
                 <span class="confirm-view__table-header--right">Price</span>
               </div>
 
@@ -48,16 +46,12 @@
                 <div class="confirm-view__row">
                   <span class="confirm-view__item-type">Release</span>
                   <span class="confirm-view__item-desc">{{ basketItem.release.title }}</span>
-                  <span class="confirm-view__item-cost">Free</span>
-                  <span class="confirm-view__item-qty">1</span>
                   <span class="confirm-view__item-price">Free</span>
                 </div>
 
                 <div v-for="svc in basketItem.services" :key="svc.id" class="confirm-view__row confirm-view__row--service">
                   <span class="confirm-view__item-type confirm-view__item-type--service">Service</span>
                   <span class="confirm-view__item-desc">{{ svc.name }}</span>
-                  <span class="confirm-view__item-cost">€{{ svc.price.toFixed(2) }}</span>
-                  <span class="confirm-view__item-qty">{{ svc.quantity }}</span>
                   <span class="confirm-view__item-price">€{{ (svc.price * svc.quantity).toFixed(2) }}</span>
                 </div>
               </template>
@@ -65,16 +59,12 @@
               <div v-if="order.discount" class="confirm-view__row">
                 <span class="confirm-view__item-type">Discount</span>
                 <span class="confirm-view__item-desc">Code: {{ order.discount.code }}</span>
-                <span class="confirm-view__item-cost"></span>
-                <span class="confirm-view__item-qty"></span>
                 <span class="confirm-view__item-price confirm-view__item-price--green">-€{{ order.discount.amount.toFixed(2) }}</span>
               </div>
 
               <div v-if="order.creditUsed" class="confirm-view__row">
-                <span class="confirm-view__item-type">Credit</span>
-                <span class="confirm-view__item-desc">Credit Reduction</span>
-                <span class="confirm-view__item-cost"></span>
-                <span class="confirm-view__item-qty"></span>
+                <span class="confirm-view__item-type confirm-view__item-type--credit">Credit</span>
+                <span class="confirm-view__item-desc">Account credit applied</span>
                 <span class="confirm-view__item-price confirm-view__item-price--green">-€{{ order.creditUsed.toFixed(2) }}</span>
               </div>
             </div>
@@ -92,7 +82,7 @@
           </div>
 
           <div class="confirm-view__actions">
-            <button class="confirm-view__primary-btn" @click="$router.push('/basket')">Back to Basket</button>
+            <a href="https://dittomusic.com/en/catalogue" class="confirm-view__primary-btn">Music Catalogue</a>
           </div>
         </section>
 
@@ -382,7 +372,7 @@ const facebookShareUrl = computed(() =>
 
   &__table-header {
     display: grid;
-    grid-template-columns: 4.5rem 1fr 5.25rem 4rem 5.25rem;
+    grid-template-columns: 4.5rem 1fr 5.25rem;
     gap: 0.5rem;
     padding: 0.72rem 0.8rem;
     border-bottom: 1px solid #ececf5;
@@ -401,7 +391,7 @@ const facebookShareUrl = computed(() =>
 
   &__row {
     display: grid;
-    grid-template-columns: 4.5rem 1fr 5.25rem 4rem 5.25rem;
+    grid-template-columns: 4.5rem 1fr 5.25rem;
     gap: 0.5rem;
     align-items: center;
     padding: 0.65rem 0.8rem;
@@ -437,6 +427,12 @@ const facebookShareUrl = computed(() =>
       border-color: #d9e3ff;
       color: #325ca9;
     }
+
+    &--credit {
+      background: #e5fff4;
+      border-color: #9deac9;
+      color: #136f4a;
+    }
   }
 
   &__item-desc {
@@ -444,8 +440,6 @@ const facebookShareUrl = computed(() =>
     font-weight: 500;
   }
 
-  &__item-cost,
-  &__item-qty,
   &__item-price {
     text-align: right;
     color: #44445e;
@@ -492,6 +486,9 @@ const facebookShareUrl = computed(() =>
   }
 
   &__primary-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 2.8rem;
     border-radius: 999px;
@@ -501,6 +498,7 @@ const facebookShareUrl = computed(() =>
     font-size: 0.84rem;
     font-weight: 700;
     font-family: $font-satoshi;
+    text-decoration: none;
     transition: opacity 0.15s;
 
     &:hover {
