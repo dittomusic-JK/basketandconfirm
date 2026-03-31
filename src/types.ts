@@ -54,6 +54,7 @@ export interface OrderSummary {
   items: BasketItem[]
   discount?: Discount
   creditUsed?: number
+  subTotal: number
   totalPrice: number
   paymentMade: number
 }

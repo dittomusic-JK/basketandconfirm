@@ -152,6 +152,7 @@ function checkout() {
     items: JSON.parse(JSON.stringify(basket.value)),
     discount: discount.value ? { ...discount.value } : undefined,
     creditUsed: credit.value.applied > 0 ? credit.value.applied : undefined,
+    subTotal: subTotal.value,
     totalPrice: totalPrice.value,
     paymentMade: totalPrice.value,
   }

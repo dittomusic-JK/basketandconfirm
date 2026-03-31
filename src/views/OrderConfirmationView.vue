@@ -21,16 +21,12 @@
           <h2 class="confirm-view__section-title">Order summary</h2>
           <div class="confirm-view__meta-grid">
             <div class="confirm-view__meta-item">
-              <span class="confirm-view__meta-label">Date placed</span>
-              <strong class="confirm-view__meta-value">{{ order.orderDate }}</strong>
+              <span class="confirm-view__meta-label">Sub-total</span>
+              <strong class="confirm-view__meta-value">€{{ order.subTotal.toFixed(2) }}</strong>
             </div>
             <div class="confirm-view__meta-item">
-              <span class="confirm-view__meta-label">Paid today</span>
-              <strong class="confirm-view__meta-value">€{{ order.amountPaid.toFixed(2) }}</strong>
-            </div>
-            <div class="confirm-view__meta-item">
-              <span class="confirm-view__meta-label">Receipt email</span>
-              <strong class="confirm-view__meta-value">{{ order.email }}</strong>
+              <span class="confirm-view__meta-label">Total</span>
+              <strong class="confirm-view__meta-value">€{{ order.totalPrice.toFixed(2) }}</strong>
             </div>
           </div>
 
@@ -70,17 +66,6 @@
             </div>
           </div>
 
-          <div class="confirm-view__totals">
-            <div class="confirm-view__total-row">
-              <span>Total</span>
-              <strong>€{{ order.totalPrice.toFixed(2) }}</strong>
-            </div>
-            <div class="confirm-view__total-row confirm-view__total-row--paid">
-              <span>Payment made</span>
-              <strong>€{{ order.paymentMade.toFixed(2) }}</strong>
-            </div>
-          </div>
-
           <div class="confirm-view__actions">
 <a href="https://dashboard.dittomusic.com" class="confirm-view__primary-btn">Music Catalogue</a>
           </div>
@@ -89,25 +74,25 @@
         <aside class="confirm-view__card confirm-view__card--next">
           <h2 class="confirm-view__next-title">What's next?</h2>
 
-          <section class="confirm-view__module">
-            <h3 class="confirm-view__module-title">Build hype for your new release</h3>
+          <section v-for="item in order.items" :key="item.release.id" class="confirm-view__module">
+            <h3 class="confirm-view__module-title">Share {{ item.release.title }}</h3>
             <div class="confirm-view__share-card">
               <img
-                v-if="shareArtworkSrc"
-                :src="shareArtworkSrc"
-                :alt="firstReleaseTitle"
+                v-if="releaseArtworkById[item.release.id]"
+                :src="releaseArtworkById[item.release.id]"
+                :alt="item.release.title"
                 class="confirm-view__share-card-art"
               />
-              <p class="confirm-view__share-card-text">{{ shareText }}</p>
+              <p class="confirm-view__share-card-text">{{ releaseShareText(item) }}</p>
             </div>
             <div class="confirm-view__share-links">
-              <a :href="facebookShareUrl" target="_blank" rel="noreferrer" class="confirm-view__share-pill">
+              <a :href="releaseFacebookUrl(item)" target="_blank" rel="noreferrer" class="confirm-view__share-pill">
                 <svg class="confirm-view__share-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6h1.7V4.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.3V11H7.5v3h2.7v8h3.3Z" fill="currentColor"/>
                 </svg>
                 Share on Facebook
               </a>
-              <a :href="twitterShareUrl" target="_blank" rel="noreferrer" class="confirm-view__share-pill">
+              <a :href="releaseTwitterUrl(item)" target="_blank" rel="noreferrer" class="confirm-view__share-pill">
                 <svg class="confirm-view__share-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M4 4h3.4l4.1 5.6L16.2 4H20l-6.6 7.5L20.4 20H17l-4.5-6.1L7.3 20H3.6l7-8L4 4Z" fill="currentColor"/>
                 </svg>
@@ -165,23 +150,19 @@ const releaseArtworkById: Record<string, string> = {
   'rel-2': `${baseUrl}img/image-3.png`,
 }
 
-const firstReleaseTitle = computed(() => order.value?.items[0]?.release.title ?? 'my next release')
-const firstReleaseDate = computed(() => order.value?.items[0]?.release.releaseDate ?? order.value?.orderDate ?? 'soon')
-const shareArtworkSrc = computed(() => {
-  const releaseId = order.value?.items[0]?.release.id
-  return releaseId ? (releaseArtworkById[releaseId] ?? '') : ''
-})
 const dittoUrl = 'https://dittomusic.com/en'
-const shareText = computed(() =>
-  `My new release ${firstReleaseTitle.value} drops on all major platforms on ${firstReleaseDate.value}. Powered by @dittomusic. ${dittoUrl}`
-)
 
-const twitterShareUrl = computed(() =>
-  `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText.value)}`
-)
-const facebookShareUrl = computed(() =>
-  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dittoUrl)}&hashtag=${encodeURIComponent('#dittomusic')}`
-)
+function releaseShareText(item: { release: { title: string; releaseDate: string } }) {
+  return `My new release ${item.release.title} drops on all major platforms on ${item.release.releaseDate}. Powered by @dittomusic. ${dittoUrl}`
+}
+
+function releaseTwitterUrl(item: { release: { title: string; releaseDate: string } }) {
+  return `https://twitter.com/intent/tweet?text=${encodeURIComponent(releaseShareText(item))}`
+}
+
+function releaseFacebookUrl(_item: { release: { title: string; releaseDate: string } }) {
+  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dittoUrl)}&hashtag=${encodeURIComponent('#dittomusic')}`
+}
 </script>
 
 <style lang="scss" scoped>
@@ -326,13 +307,9 @@ const facebookShareUrl = computed(() =>
 
   &__meta-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.85rem;
     margin-bottom: 1.25rem;
-
-    @media (max-width: $breakpoint-md) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 
   &__meta-item {
@@ -452,33 +429,6 @@ const facebookShareUrl = computed(() =>
 
   &__item-price--green {
     color: #1b8f5f;
-  }
-
-  &__totals {
-    margin-top: 0.9rem;
-    border-top: 1px solid #ececf5;
-    padding-top: 0.8rem;
-  }
-
-  &__total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.35rem 0;
-    font-size: 0.85rem;
-    font-family: $font-satoshi;
-    color: #5f5f77;
-
-    strong {
-      font-size: 0.95rem;
-      color: var(--blue);
-    }
-  }
-
-  &__total-row--paid {
-    margin-top: 0.25rem;
-    border-top: 1px solid #ececf5;
-    padding-top: 0.6rem;
   }
 
   &__actions {
