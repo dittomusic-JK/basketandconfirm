@@ -21,12 +21,12 @@
           <h2 class="confirm-view__section-title">Order summary</h2>
           <div class="confirm-view__meta-grid">
             <div class="confirm-view__meta-item">
-              <span class="confirm-view__meta-label">Sub-total</span>
-              <strong class="confirm-view__meta-value">€{{ order.subTotal.toFixed(2) }}</strong>
+              <span class="confirm-view__meta-label">Date placed</span>
+              <strong class="confirm-view__meta-value">{{ order.orderDate }}</strong>
             </div>
             <div class="confirm-view__meta-item">
-              <span class="confirm-view__meta-label">Total</span>
-              <strong class="confirm-view__meta-value">€{{ order.totalPrice.toFixed(2) }}</strong>
+              <span class="confirm-view__meta-label">Receipt email</span>
+              <strong class="confirm-view__meta-value">{{ order.email }}</strong>
             </div>
           </div>
 
@@ -63,6 +63,17 @@
                 <span class="confirm-view__item-desc">Account credit applied</span>
                 <span class="confirm-view__item-price confirm-view__item-price--green">-€{{ order.creditUsed.toFixed(2) }}</span>
               </div>
+            </div>
+          </div>
+
+          <div class="confirm-view__totals">
+            <div class="confirm-view__total-row">
+              <span>Sub-total</span>
+              <strong>€{{ order.subTotal.toFixed(2) }}</strong>
+            </div>
+            <div class="confirm-view__total-row confirm-view__total-row--total">
+              <span>Total</span>
+              <strong>€{{ order.totalPrice.toFixed(2) }}</strong>
             </div>
           </div>
 
@@ -429,6 +440,42 @@ function releaseFacebookUrl(_item: { release: { title: string; releaseDate: stri
 
   &__item-price--green {
     color: #1b8f5f;
+  }
+
+  &__totals {
+    margin-top: 0.9rem;
+    border-top: 1px solid #ececf5;
+    padding-top: 0.8rem;
+  }
+
+  &__total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0;
+    font-size: 0.85rem;
+    font-family: $font-satoshi;
+    color: #5f5f77;
+
+    strong {
+      font-size: 0.95rem;
+      color: var(--blue);
+    }
+  }
+
+  &__total-row--total {
+    margin-top: 0.25rem;
+    border-top: 1px solid #ececf5;
+    padding-top: 0.6rem;
+
+    span {
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    strong {
+      font-size: 1.05rem;
+    }
   }
 
   &__actions {
