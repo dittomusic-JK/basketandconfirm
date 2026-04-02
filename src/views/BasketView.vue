@@ -125,8 +125,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useBasketStore } from '../composables/useBasketStore'
 import BasketItemGroup from '../components/basket/BasketItemGroup.vue'
 import DiscountCode from '../components/basket/DiscountCode.vue'
@@ -136,12 +136,19 @@ import RemoveConfirmModal from '../components/basket/RemoveConfirmModal.vue'
 import Toast from '../components/ui/Toast.vue'
 
 const router = useRouter()
+const route = useRoute()
 const {
   basket, discount, credit, subTotal, discountAmount, creditApplied,
   totalPrice, isFreeOrder, removeRelease, applyDiscount, removeDiscount,
   applyCredit, removeCredit, loadPaidBasket, loadFreeBasket, checkout,
   toastMessage, toastType, toastVisible, showToast
 } = useBasketStore()
+
+onMounted(() => {
+  const demo = route.query.demo as string | undefined
+  if (demo === 'paid') loadPaidBasket()
+  else if (demo === 'free') loadFreeBasket()
+})
 
 const serviceCount = computed(() =>
   basket.value.reduce((sum, basketItem) => sum + basketItem.services.length, 0)

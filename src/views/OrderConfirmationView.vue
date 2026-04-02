@@ -146,11 +146,27 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useBasketStore } from '../composables/useBasketStore'
 import Toast from '../components/ui/Toast.vue'
 
-const { order, toastMessage, toastType, toastVisible, showToast } = useBasketStore()
+const route = useRoute()
+const { order, toastMessage, toastType, toastVisible, showToast, loadPaidBasket, loadFreeBasket, checkout } = useBasketStore()
+
+// Auto-generate an order from ?demo= param so the page renders standalone
+onMounted(() => {
+  if (!order.value) {
+    const demo = route.query.demo as string | undefined
+    if (demo === 'paid') {
+      loadPaidBasket()
+      checkout()
+    } else if (demo === 'free') {
+      loadFreeBasket()
+      checkout()
+    }
+  }
+})
 const baseUrl = import.meta.env.BASE_URL
 
 const promoUrl = 'https://dittomusic.com/promo'
