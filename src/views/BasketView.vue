@@ -34,8 +34,13 @@
               v-for="item in basket"
               :key="item.release.id"
               :item="item"
+              :eligible-vouchers="eligibleVouchersFor(item)"
+              :applied-voucher="appliedVoucherOptionFor(item)"
+              :freed-service-ids="freedServiceIdsFor(item)"
               @edit="handleEdit"
               @remove="handleRemoveClick"
+              @apply-voucher="applyVoucher"
+              @remove-voucher="removeVoucher"
             />
           </div>
         </div>
@@ -68,6 +73,10 @@
               <div class="basket-view__total-row">
                 <span>Sub Total</span>
                 <span class="basket-view__total-value">€{{ subTotal.toFixed(2) }}</span>
+              </div>
+              <div v-if="voucherSavings > 0" class="basket-view__total-row">
+                <span>Voucher savings</span>
+                <span class="basket-view__total-value basket-view__total-value--green">-€{{ voucherSavings.toFixed(2) }}</span>
               </div>
               <div v-if="discount" class="basket-view__total-row">
                 <span>Discount ({{ discount.code }})</span>
@@ -112,6 +121,8 @@
       <span class="basket-view__admin-label">Demo:</span>
       <button class="basket-view__admin-btn" @click="loadFreeBasket">Free basket</button>
       <button class="basket-view__admin-btn" @click="loadPaidBasket">Paid basket</button>
+      <button class="basket-view__admin-btn" @click="loadVoucherBasket(1)">1 voucher</button>
+      <button class="basket-view__admin-btn" @click="loadVoucherBasket(2)">2 vouchers</button>
     </div>
 
     <!-- Toast -->
@@ -139,8 +150,10 @@ const router = useRouter()
 const route = useRoute()
 const {
   basket, discount, credit, subTotal, discountAmount, creditApplied,
-  totalPrice, isFreeOrder, removeRelease, applyDiscount, removeDiscount,
-  applyCredit, removeCredit, loadPaidBasket, loadFreeBasket, checkout,
+  voucherSavings, totalPrice, isFreeOrder, removeRelease, applyDiscount, removeDiscount,
+  applyCredit, removeCredit, applyVoucher, removeVoucher,
+  eligibleVouchersFor, appliedVoucherOptionFor, freedServiceIdsFor,
+  loadPaidBasket, loadFreeBasket, loadVoucherBasket, checkout,
   toastMessage, toastType, toastVisible, showToast
 } = useBasketStore()
 
@@ -148,6 +161,8 @@ onMounted(() => {
   const demo = route.query.demo as string | undefined
   if (demo === 'paid') loadPaidBasket()
   else if (demo === 'free') loadFreeBasket()
+  else if (demo === 'voucher') loadVoucherBasket(1)
+  else if (demo === 'vouchers') loadVoucherBasket(2)
 })
 
 const serviceCount = computed(() =>

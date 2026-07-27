@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5174", "--strictPort"],
+      "port": 5174,
+      "autoPort": false
+    },
+    {
+      "name": "trends-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/jameskeane/Documents/Ditto Components/Trends Area/ditto-trends", "run", "dev", "--", "--port", "5175", "--strictPort"],
+      "port": 5175,
+      "autoPort": false
+    }
+  ]
+}

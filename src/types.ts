@@ -40,6 +40,29 @@ export interface Discount {
   amount: number
 }
 
+/** A pre-paid entitlement (from a purchased bundle) redeemable against one release's services */
+export interface Voucher {
+  id: string
+  name: string
+  /** Bundle the voucher came from, shown as secondary copy */
+  bundle?: string
+  /** Service-name prefixes this voucher covers */
+  covers: string[]
+}
+
+/** A voucher resolved against a specific release: what it covers there and what it saves */
+export interface VoucherOption {
+  voucher: Voucher
+  savings: number
+  coveredNames: string[]
+}
+
+export interface VoucherUsed {
+  name: string
+  releaseTitle: string
+  amount: number
+}
+
 export interface Credit {
   balance: number
   applied: number
@@ -54,6 +77,8 @@ export interface OrderSummary {
   items: BasketItem[]
   discount?: Discount
   creditUsed?: number
+  vouchersUsed?: VoucherUsed[]
+  voucherSavings?: number
   subTotal: number
   totalPrice: number
   paymentMade: number

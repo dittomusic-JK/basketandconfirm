@@ -52,6 +52,12 @@
                 </div>
               </template>
 
+              <div v-for="voucherUsed in order.vouchersUsed" :key="`${voucherUsed.name}-${voucherUsed.releaseTitle}`" class="confirm-view__row">
+                <span class="confirm-view__item-type">Voucher</span>
+                <span class="confirm-view__item-desc">{{ voucherUsed.name }} — {{ voucherUsed.releaseTitle }}</span>
+                <span class="confirm-view__item-price confirm-view__item-price--green">-€{{ voucherUsed.amount.toFixed(2) }}</span>
+              </div>
+
               <div v-if="order.discount" class="confirm-view__row">
                 <span class="confirm-view__item-type">Discount</span>
                 <span class="confirm-view__item-desc">Code: {{ order.discount.code }}</span>
@@ -146,13 +152,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useBasketStore } from '../composables/useBasketStore'
 import Toast from '../components/ui/Toast.vue'
 
 const route = useRoute()
-const { order, toastMessage, toastType, toastVisible, showToast, loadPaidBasket, loadFreeBasket, checkout } = useBasketStore()
+const { order, toastMessage, toastType, toastVisible, loadPaidBasket, loadFreeBasket, loadVoucherBasket, applyVoucher, checkout } = useBasketStore()
 
 // Auto-generate an order from ?demo= param so the page renders standalone
 onMounted(() => {
@@ -163,6 +169,15 @@ onMounted(() => {
       checkout()
     } else if (demo === 'free') {
       loadFreeBasket()
+      checkout()
+    } else if (demo === 'voucher') {
+      loadVoucherBasket(1)
+      applyVoucher('rel-1', 'vch-1')
+      checkout()
+    } else if (demo === 'vouchers') {
+      loadVoucherBasket(2)
+      applyVoucher('rel-1', 'vch-1')
+      applyVoucher('rel-2', 'vch-2')
       checkout()
     }
   }

@@ -48,21 +48,42 @@
         <span v-if="svc.name === 'Pre-release Downloads'" class="basket-row__meta">{{ item.release.releaseDate }}</span>
       </div>
       <div class="basket-row__actions-cell"></div>
-      <div class="basket-row__total">€{{ svc.price.toFixed(2) }}</div>
+      <div class="basket-row__total">
+        <template v-if="freedServiceIds?.includes(svc.id)">
+          <s class="basket-row__struck-price">€{{ svc.price.toFixed(2) }}</s>
+          <span class="basket-row__free-price">Free</span>
+        </template>
+        <template v-else>€{{ svc.price.toFixed(2) }}</template>
+      </div>
     </div>
+
+    <!-- Voucher strip: offer / picker / applied -->
+    <VoucherPicker
+      v-if="appliedVoucher || (eligibleVouchers && eligibleVouchers.length > 0)"
+      :options="eligibleVouchers ?? []"
+      :applied="appliedVoucher ?? null"
+      @apply="voucherId => $emit('applyVoucher', item.release.id, voucherId)"
+      @remove="$emit('removeVoucher', item.release.id)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { BasketItem } from '../../types'
+import type { BasketItem, VoucherOption } from '../../types'
+import VoucherPicker from './VoucherPicker.vue'
 
 defineProps<{
   item: BasketItem
+  eligibleVouchers?: VoucherOption[]
+  appliedVoucher?: VoucherOption | null
+  freedServiceIds?: string[]
 }>()
 
 defineEmits<{
   edit: [releaseId: string]
   remove: [releaseId: string]
+  applyVoucher: [releaseId: string, voucherId: string]
+  removeVoucher: [releaseId: string]
 }>()
 
 const baseUrl = import.meta.env.BASE_URL
@@ -208,6 +229,17 @@ const releaseArtworkSrc = (releaseId: string): string => releaseArtworkById[rele
     @media (max-width: 768px) {
       display: none;
     }
+  }
+
+  &__struck-price {
+    color: #a9a9c0;
+    font-weight: 400;
+    margin-right: 0.35rem;
+  }
+
+  &__free-price {
+    color: #1b8f5f;
+    font-weight: 700;
   }
 }
 
